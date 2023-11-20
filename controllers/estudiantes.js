@@ -1,15 +1,16 @@
-// controllers/libros.js
+// controllers/estudiantes.js
 const { response } = require('express');
-// Models
-const Libro = require('../models/libro');
 
-//Obtener todos los libros
-const getLibros = async (req, res = response) => {
+// Models
+const Estudiante = require('../models/estudiante');
+
+//Obtener todos los estudiantes
+const getEstudiantes = async (req, res = response) => {
     try {
-        const libros = await Libro.findAll();
+        const estudiantes = await Estudiante.findAll();
         res.json({
             ok: true,
-            libros
+            estudiantes
         });
     } catch (error) {
         console.log(error);
@@ -21,5 +22,5 @@ const getLibros = async (req, res = response) => {
 };
 
 module.exports = {
-    getLibros,
+    getEstudiantes,
 };

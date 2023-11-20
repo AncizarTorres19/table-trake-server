@@ -32,6 +32,9 @@ class Server {
         //API Endpoints
         this.app.use('/api/login', require('../router/auth'));
         this.app.use('/api/books', require('../router/libros'));
+        this.app.use('/api/students', require('../router/estudiantes'));
+        this.app.use('/api/professors', require('../router/profesores'));
+        this.app.use('/api/assignments', require('../router/asignaciones'));
     }
 
     execute() {
