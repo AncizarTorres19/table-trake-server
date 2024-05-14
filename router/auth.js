@@ -2,7 +2,7 @@
 const { Router } = require('express');
 
 // Controllers
-const { crearUsuario, revalidarToken, loginUsuario } = require('../controllers/auth');
+const { createUser, revalidateToken, loginUser } = require('../controllers/auth');
 const { check } = require('express-validator');
 
 // Middlewares
@@ -14,27 +14,26 @@ const router = Router();
 //Crear un nuevo usuario
 router.post('/new', [
     //middlewares
-    check('email', 'El email es obligatorio').isEmail(),
     check('password', 'El password es obligatorio').not().isEmpty(),
-    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    check('apellido', 'El apellido es obligatorio').not().isEmpty(),
-    check('rol', 'El rol es obligatorio').not().isEmpty(),
+    check('user_name', 'El user_name es obligatorio').not().isEmpty(),
+    check('name', 'El nombre es obligatorio').not().isEmpty(),
+    check('role', 'El rol es obligatorio').not().isEmpty(),
     validarCampos
-], crearUsuario);
+], createUser);
 
 //Login
 router.post('/', [
     //middlewares
-    check('email', 'El email es obligatorio').isEmail(),
+    check('user_name', 'El user_name es obligatorio').not().isEmpty(),
     check('password', 'El password es obligatorio').not().isEmpty(),
     validarCampos
-], loginUsuario);
+], loginUser);
 
 //Revalidar token
 router.get('/renew', [
     //middlewares
     validarJWT
-], revalidarToken);
+], revalidateToken);
 
 
 module.exports = router;

@@ -1,47 +1,47 @@
 // controllers/auth.js
 const { response } = require('express');
 // Models
-const Usuario = require('../models/usuario');
+const User = require('../models/user');
 // Bcrypt
 const bcrypt = require('bcryptjs');
 // JWT
 const { generarJWT } = require('../helpers/jwt');
 
 //Crear un nuevo usuario
-const crearUsuario = async (req, res = response) => {
+const createUser = async (req, res = response) => {
     try {
-        const { email, password } = req.body;
+        const { user_name, password } = req.body;
 
-        // Verificar si el email existe
-        const existeEmail = await Usuario.findOne({ where: { email } });
+        // Verificar si el user_name existe
+        const existe_user_name = await User.findOne({ where: { user_name } });
 
-        if (existeEmail) {
+        if (existe_user_name) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El correo ya está registrado'
+                msg: 'El usuario ya está registrado'
             });
         }
 
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        const contrasenaEncriptada = bcrypt.hashSync(password, salt);
+        const passwordEncriptada = bcrypt.hashSync(password, salt);
 
-        // Crear objeto Usuario con contraseña encriptada
-        const usuario = new Usuario({
+        // Crear objeto User con contraseña encriptada
+        const user = new User({
             ...req.body,
-            contrasena: contrasenaEncriptada
+            password: passwordEncriptada
         });
 
-        // Guardar usuario en BD
-        await usuario.save();
+        // Guardar user en BD
+        await user.save();
 
         // Generar el JWT
-        const token = await generarJWT(usuario.id, usuario.nombre);
+        const token = await generarJWT(user.id, user.user_name);
 
         res.json({
             ok: true,
             msg: 'register',
-            usuario,
+            user,
             token
         });
     } catch (error) {
@@ -54,22 +54,22 @@ const crearUsuario = async (req, res = response) => {
 };
 
 //Login
-const loginUsuario = async (req, res = response) => {
-    const { email, password } = req.body;
+const loginUser = async (req, res = response) => {
+    const { user_name, password } = req.body;
 
     try {
-        // Verificar si el email existe
-        const usuarioDB = await Usuario.findOne({ where: { email } });
+        // Verificar si el user_name existe
+        const userDB = await User.findOne({ where: { user_name } });
 
-        if (!usuarioDB) {
+        if (!userDB) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Email no encontrado'
+                msg: 'user_name no encontrado'
             });
         };
 
         // Validar el password
-        const validPassword = bcrypt.compareSync(password, usuarioDB.contrasena);
+        const validPassword = bcrypt.compareSync(password, userDB.password);
 
         if (!validPassword) {
             return res.status(400).json({
@@ -79,12 +79,12 @@ const loginUsuario = async (req, res = response) => {
         };
 
         // Generar el JWT
-        const token = await generarJWT(usuarioDB.id, usuarioDB.nombre);
+        const token = await generarJWT(userDB.id, userDB.name);
 
         res.json({
             ok: true,
             msg: 'login',
-            usuario: usuarioDB,
+            user: userDB,
             token
         });
     } catch (error) {
@@ -97,7 +97,7 @@ const loginUsuario = async (req, res = response) => {
 };
 
 //Revalidar token
-const revalidarToken = async (req, res = response) => {
+const revalidateToken = async (req, res = response) => {
 
     const { uid, name } = req;
 
@@ -105,18 +105,18 @@ const revalidarToken = async (req, res = response) => {
     const token = await generarJWT(uid, name);
 
     //Obtener el usuario por el uid
-    const usuario = await Usuario.findByPk(uid);
+    const user = await User.findByPk(uid);
 
     res.json({
         ok: true,
         msg: 'renew',
         token,
-        usuario
+        user
     });
 };
 
 module.exports = {
-    crearUsuario,
-    loginUsuario,
-    revalidarToken
+    createUser,
+    loginUser,
+    revalidateToken
 };

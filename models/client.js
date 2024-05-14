@@ -1,42 +1,34 @@
-// models/libro.js
+// models/client.js
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../database/config');
 
-const Libro = sequelize.define('Libro', {
-    titulo: {
+const Client = sequelize.define('Client', {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    tipo: {
+    identification: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    categoria: {
+    telephone: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    cantidad_total: {
+    email: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    cantidad_prestados: {
+    bills: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    cantidad_reparacion: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    cantidad_mora: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    editorial: {
-        type: DataTypes.STRING,
+    birthday_date: {
+        type: DataTypes.DATE,
         allowNull: false,
     },
 }, {
-    tableName: 'libros', // Ajusta el nombre de la tabla aquí
+    tableName: 'client', // Ajusta el nombre de la tabla aquí
 });
 
-module.exports = Libro;
+module.exports = Client;
