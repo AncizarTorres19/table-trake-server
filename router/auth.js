@@ -2,7 +2,7 @@
 const { Router } = require('express');
 
 // Controllers
-const { createUser, revalidateToken, loginUser } = require('../controllers/auth');
+const { createUser, revalidateToken, loginUser, getUsers, updateUser, deleteUser } = require('../controllers/auth');
 const { check } = require('express-validator');
 
 // Middlewares
@@ -18,6 +18,7 @@ router.post('/new', [
     check('user_name', 'El user_name es obligatorio').not().isEmpty(),
     check('name', 'El nombre es obligatorio').not().isEmpty(),
     check('role', 'El rol es obligatorio').not().isEmpty(),
+    check('status', 'El status es obligatorio').not().isEmpty(),
     validarCampos
 ], createUser);
 
@@ -34,6 +35,21 @@ router.get('/renew', [
     //middlewares
     validarJWT
 ], revalidateToken);
+
+//Obtener todos los Usuarios
+router.get('/', validarJWT, getUsers);
+
+//Actualizar un usuario
+router.put('/:id', [
+    //middlewares
+    validarJWT
+], updateUser);
+
+//Eliminar un usuario
+router.delete('/:id', [
+    //middlewares
+    validarJWT
+], deleteUser);
 
 
 module.exports = router;

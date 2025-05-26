@@ -2,15 +2,16 @@
 const { response } = require('express');
 const { Sequelize, Op } = require('sequelize');
 // Models
-const Client = require('../models/client');
+const Establishments = require('../models/establishments');
 
-//Obtener todos los clientes
-const getClients = async (req, res = response) => {
+//Obtener todos los establecimientos
+const getEstablishments = async (req, res = response) => {
+    console.log('Obteniendo establecimientos')
     try {
-        const clients = await Client.findAll();
+        const establishments = await Establishments.findAll();
         res.json({
             ok: true,
-            clients,
+            establishments,
         });
     } catch (error) {
         console.log(error);
@@ -21,21 +22,21 @@ const getClients = async (req, res = response) => {
     }
 };
 
-//Actualizar un cliente
-const updateClient = async (req, res = response) => {
+//Actualizar un establecimiento
+const updateEstablishment = async (req, res = response) => {
     const id = req.params.id;
     try {
-        const client = await Client.findByPk(id);
-        if (!client) {
+        const establishment = await Establishments.findByPk(id);
+        if (!establishment) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un cliente con ese id'
+                msg: 'No existe un establecimiento con ese id'
             });
         }
-        await client.update(req.body);
+        await establishment.update(req.body);
         res.json({
             ok: true,
-            client,
+            establishment,
         });
     } catch (error) {
         console.log(error);
@@ -46,14 +47,14 @@ const updateClient = async (req, res = response) => {
     }
 };
 
-//Crear un nuevo cliente
-const createClient = async (req, res = response) => {
+//Crear un nuevo establecimiento
+const createEstablishment = async (req, res = response) => {
     try {
-        const client = new Client(req.body);
-        await client.save();
+        const establishment = new Establishments(req.body);
+        await establishment.save();
         res.json({
             ok: true,
-            client,
+            establishment,
         });
     } catch (error) {
         console.log(error);
@@ -64,21 +65,21 @@ const createClient = async (req, res = response) => {
     }
 };
 
-//Borrar un cliente
-const deleteClient = async (req, res = response) => {
+//Eliminar un establecimiento
+const deleteEstablishment = async (req, res = response) => {
     const id = req.params.id;
     try {
-        const client = await Client.findByPk(id);
-        if (!client) {
+        const establishment = await Establishments.findByPk(id);
+        if (!establishment) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No existe un cliente con ese id'
+                msg: 'No existe un establecimiento con ese id'
             });
         }
-        await client.destroy();
+        await establishment.destroy();
         res.json({
             ok: true,
-            msg: 'Cliente eliminado',
+            msg: 'Establecimiento eliminado'
         });
     } catch (error) {
         console.log(error);
@@ -90,8 +91,8 @@ const deleteClient = async (req, res = response) => {
 };
 
 module.exports = {
-    createClient,
-    deleteClient,
-    getClients,
-    updateClient,
+    getEstablishments,
+    updateEstablishment,
+    createEstablishment,
+    deleteEstablishment
 };

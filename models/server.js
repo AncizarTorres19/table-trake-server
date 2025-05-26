@@ -30,8 +30,10 @@ class Server {
         this.app.use(express.json());
 
         //API Endpoints
-        this.app.use('/api/login', require('../router/auth'));
+        this.app.use('/api/user', require('../router/auth'));
         this.app.use('/api/clients', require('../router/clients'));
+        this.app.use('/api/establishments', require('../router/establishments'));
+        this.app.use('/api/locations', require('../router/locations'));
     }
 
     execute() {

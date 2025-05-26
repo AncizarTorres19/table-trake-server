@@ -2,37 +2,37 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../database/config');
 
-const User = sequelize.define('User', {
+const Establishments = sequelize.define('Establishments', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    user_name: {
+    state: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
-    password: {
+    city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
-    role: {
+    address: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
-    status: {
+    phone: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
-    establishments: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER), // Array of integers
         allowNull: true,
     },
     tables: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    type: {
         type: DataTypes.STRING,
         allowNull: true,
     },
 }, {
-    tableName: 'user', // Ajusta el nombre de la tabla aquí
+    tableName: 'establishments', // Ajusta el nombre de la tabla aquí
 });
 
-module.exports = User;
+module.exports = Establishments;

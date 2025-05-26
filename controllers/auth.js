@@ -115,8 +115,101 @@ const revalidateToken = async (req, res = response) => {
     });
 };
 
+//Obtener todos los Usuarios
+const getUsers = async (req, res = response) => {
+    try {
+        const users = await User.findAll();
+
+        res.json({
+            ok: true,
+            users
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+};
+
+//Actualizar un usuario
+const updateUser = async (req, res = response) => {
+    const uid = req.params.id;
+    try {
+        const userDB = await User.findByPk(uid);
+
+        if (!userDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un usuario con ese id'
+            });
+        }
+
+        // Actualizaciones
+        const { password, ...campos } = req.body;
+
+        if (userDB.user_name !== user_name) {
+            const existe_user_name = await User.findOne({ where: { user_name } });
+            if (existe_user_name) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe un usuario con ese user_name'
+                });
+            }
+        }
+
+        campos.user_name = user_name;
+
+        // Actualizar usuario
+        await userDB.update(campos);
+
+        res.json({
+            ok: true,
+            user: userDB
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+};
+
+//Eliminar un usuario
+const deleteUser = async (req, res = response) => {
+    const uid = req.params.id;
+    try {
+        const userDB = await User.findByPk(uid);
+
+        if (!userDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un usuario con ese id'
+            });
+        }
+
+        await userDB.destroy();
+
+        res.json({
+            ok: true,
+            msg: 'Usuario eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+};
+
 module.exports = {
     createUser,
     loginUser,
-    revalidateToken
+    revalidateToken,
+    getUsers,
+    updateUser,
+    deleteUser
 };
